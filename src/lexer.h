@@ -3,7 +3,6 @@
 
 typedef enum {
     NONE,
-    EOT,
 
     SYMBOL,
 
@@ -42,3 +41,4 @@ typedef struct {
 
 Token* lexer(const char* string);
 void free_tokens(Token* token);
+void print_tokens(Token* tokens);
