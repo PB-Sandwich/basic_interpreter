@@ -5,6 +5,20 @@
 #include <stdlib.h>
 #include <string.h>
 
+TokenType check_string_type(char* lexeme)
+{
+    size_t str_len = strlen(lexeme);
+    if (str_len > KEY_WORDS_WIDTH) {
+        return SYMBOL;
+    }
+    for (size_t i = 0; i < KEY_WORDS_LENGTH; i++) {
+        if (memcmp(lexeme, KEY_WORDS[i], str_len) == 0) {
+            return ENUM_KEYWORDS_OFFSET + i;
+        }
+    }
+    return SYMBOL;
+}
+
 Token read_string(size_t* i, const char* string)
 {
     Token token;
@@ -23,6 +37,8 @@ Token read_string(size_t* i, const char* string)
     token.lexeme = (char*)malloc(size);
     token.lexeme = memcpy(token.lexeme, &string[start_index], size);
     token.lexeme[size] = '\0';
+
+    token.type = check_string_type(token.lexeme);
 
     return token;
 }
@@ -52,7 +68,8 @@ Token* lexer(const char* string)
     }
 
     size_t size = 0;
-    for (; tokens[size].type != 0; size++);
+    for (; tokens[size].type != 0; size++)
+        ;
     tokens = (Token*)realloc(tokens, size * sizeof(Token) + 1);
     tokens[size].type = 0;
 
@@ -68,7 +85,8 @@ void free_tokens(Token* tokens)
     free(tokens);
 }
 
-void print_tokens(Token* tokens) {
+void print_tokens(Token* tokens)
+{
     printf("[\n");
     for (size_t i = 0; tokens[i].type != 0; i++) {
         const Token t = tokens[i];

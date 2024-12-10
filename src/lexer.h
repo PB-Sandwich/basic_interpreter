@@ -15,7 +15,7 @@ typedef enum {
     NUMBER,
     STRING,
 
-    FOR,
+    FOR, // always keep keywords in same order as KEY_WORDS or offset doesn't work
     WHILE,
     FN,
     END,
@@ -24,7 +24,11 @@ typedef enum {
     TERM
 } TokenType;
 
-static const char* KeyWords[] = {
+static const size_t ENUM_KEYWORDS_OFFSET = FOR;
+
+#define KEY_WORDS_LENGTH 4
+#define KEY_WORDS_WIDTH 6
+static const char KEY_WORDS[KEY_WORDS_LENGTH][KEY_WORDS_WIDTH] = {
     "for",
     "while",
     "fn",
