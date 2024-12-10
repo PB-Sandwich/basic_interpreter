@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-Token read_symbol(size_t* i, const char* string)
+Token read_string(size_t* i, const char* string)
 {
     Token token;
     token.character_postion = *i;
@@ -13,14 +13,16 @@ Token read_symbol(size_t* i, const char* string)
     token.number_literal = 0.0;
     token.string_literal = NULL;
 
+    size_t start_index = *i;
+
     size_t size = 0;
-    while ((isalpha(string[*i]) || string[*i] == '_') && string[*i] != '\0') {
+    while ((isalpha(string[*i]) || string[*i] == '_' || isdigit(string[*i])) && string[*i] != '\0') {
         size++;
         *i += 1;
     }
-    size--;
-    token.lexeme = (char*)malloc(size + 1);
-    token.lexeme = memcpy(token.lexeme, &string[*i - 1], size);
+    token.lexeme = (char*)malloc(size);
+    token.lexeme = memcpy(token.lexeme, &string[start_index], size);
+    token.lexeme[size] = '\0';
 
     return token;
 }
@@ -30,20 +32,23 @@ Token* lexer(const char* string)
     Token* tokens = (Token*)malloc(8 * sizeof(Token));
     memset(tokens, 0, sizeof(Token) * 8);
 
-    for (size_t i = 0, j = 0;
-         string[i] != '\0';
-         i++, j++) {
+    size_t tokens_length = 8;
+    size_t tokens_index = 0;
 
-        if (j % 8 == 0 && j != 0) {
-            tokens = (Token*)realloc(tokens, j * sizeof(Token));
-            memset(tokens + (j * sizeof(Token)) - 1, 0, 8 * sizeof(Token));
+    for (size_t string_index = 0; string[string_index] != '\0'; string_index++) {
+        if (tokens_index + 1 >= tokens_length) {
+            tokens = (Token*)realloc(tokens, (tokens_length * sizeof(Token)) + (8 * sizeof(Token)));
+            memset(&tokens[tokens_index], 0, 8 * sizeof(Token));
+            tokens_length += 8;
         }
 
-        const char c = string[i];
+        const char c = string[string_index];
 
         if (isalpha(c) || c == '_') {
-            tokens[j] = read_symbol(&i, string);
+            tokens[tokens_index] = read_string(&string_index, string);
         }
+
+        tokens_index++;
     }
 
     size_t size = 0;
