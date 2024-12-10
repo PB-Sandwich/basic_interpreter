@@ -3,6 +3,7 @@
 
 typedef enum {
     NONE,
+    WHITESPACE,
 
     SYMBOL,
 

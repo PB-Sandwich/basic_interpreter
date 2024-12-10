@@ -13,7 +13,7 @@ int main() {
 
     // fclose(file);
 
-    Token* tokens = lexer("for test1 test2 end test3 endtest4 while test5 fn test6\0");
+    Token* tokens = lexer("a = \"\"\0");
     print_tokens(tokens);
     free_tokens(tokens);
 
