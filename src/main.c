@@ -16,7 +16,7 @@ int main() {
         .length = 0,
     };
     String string = new_string("test");
-    Symbol str_sym = new_string_symbol("name test", string);
+    Symbol str_sym = new_string_symbol("name", string);
     Number number = new_number(1.234);
     Symbol num_sym = new_number_symbol("number sym", number);
     add_symbol(&symbol_table, str_sym);
