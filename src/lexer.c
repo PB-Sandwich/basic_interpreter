@@ -46,50 +46,52 @@ Token read_symbol(size_t* i, const char* string)
     return token;
 }
 
-Token read_operator(size_t* i, const char* string) {
+Token read_operator(size_t* i, const char* string)
+{
     char c = string[*i];
     Token token;
     token.lexeme = (char*)malloc(2 * sizeof(char));
     memset(token.lexeme, '\0', 2);
     switch (c) {
-        case '=':
-            token.type = EQUALS;
-            token.lexeme[0] = c;
-            token.character_postion = *i;
+    case '=':
+        token.type = EQUALS;
+        token.lexeme[0] = c;
+        token.character_postion = *i;
         break;
-        case '+':
-            token.type = PLUS;
-            token.lexeme[0] = c;
-            token.character_postion = *i;
+    case '+':
+        token.type = PLUS;
+        token.lexeme[0] = c;
+        token.character_postion = *i;
         break;
-        case '-':
-            token.type = MINUS;
-            token.lexeme[0] = c;
-            token.character_postion = *i;
+    case '-':
+        token.type = MINUS;
+        token.lexeme[0] = c;
+        token.character_postion = *i;
         break;
-        case '*':
-            token.type = STAR;
-            token.lexeme[0] = c;
-            token.character_postion = *i;
+    case '*':
+        token.type = STAR;
+        token.lexeme[0] = c;
+        token.character_postion = *i;
         break;
-        case '/':
-            token.type = SLASH;
-            token.lexeme[0] = c;
-            token.character_postion = *i;
+    case '/':
+        token.type = SLASH;
+        token.lexeme[0] = c;
+        token.character_postion = *i;
         break;
-        default: 
-            token.type = NONE;
-            token.character_postion = *i;
-            token.lexeme[0] = c;
+    default:
+        token.type = NONE;
+        token.character_postion = *i;
+        token.lexeme[0] = c;
         break;
     }
     return token;
 }
 
-Token read_number(size_t* i, const char* string) {
+Token read_number(size_t* i, const char* string)
+{
     char c = string[*i];
     size_t size = 0;
-    while(isdigit(c) || c == '.') {
+    while (isdigit(c) || c == '.') {
         size++;
         c = string[*i + size];
     }
@@ -106,7 +108,8 @@ Token read_number(size_t* i, const char* string) {
     return token;
 }
 
-Token read_string(size_t* i, const char* string) {
+Token read_string(size_t* i, const char* string)
+{
     char c = string[*i];
     char match = c;
     size_t size = 0;
@@ -153,8 +156,11 @@ Token* lexer(const char* string)
         }
 
         const char c = string[string_index];
-        Token *token = &tokens[tokens_index];
+        Token* token = &tokens[tokens_index];
 
+        if (isspace(c)) {
+            continue;
+        }
         if (isalpha(c) || c == '_') {
             *token = read_symbol(&string_index, string);
         }
@@ -166,12 +172,6 @@ Token* lexer(const char* string)
         }
         if (c == '\'' || c == '\"') {
             *token = read_string(&string_index, string);
-        }
-        if (isspace(c)) {
-            token->type = WHITESPACE;
-            token->lexeme = (char*)malloc(1);
-            token->lexeme[0] = c;
-            token->character_postion = string_index;
         }
 
         tokens_index++;

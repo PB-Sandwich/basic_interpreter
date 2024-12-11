@@ -1,4 +1,7 @@
 
+#ifndef LEXER_H
+#define LEXER_H
+
 #include <stddef.h>
 
 typedef enum {
@@ -47,3 +50,5 @@ typedef struct {
 Token* lexer(const char* string);
 void free_tokens(Token* token);
 void print_tokens(Token* tokens);
+
+#endif
